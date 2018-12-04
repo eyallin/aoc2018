@@ -36,7 +36,7 @@ def day3a(data):
     return len([a for a in pixels.values() if a>1])
 
 
-def test_dummy():
+def test_day3a():
     data = """
 #1 @ 1,3: 4x4
 #2 @ 3,1: 4x4
