@@ -27,12 +27,20 @@ def test_pixels_in_claim():
     assert set(pixels_in_claim(c)) == set((a, b) for a in range(c.x, c.x + c.xs) for b in range(c.y, c.y + c.ys))
 
 
-def day3a(data):
-    pixels = collections.Counter()
+def parse_all_claims(data):
     for line in data.splitlines():
         if not line: continue
-        claim = parse_claim(line)
+        yield parse_claim(line)
+
+
+def process_claims(claims):
+    pixels = collections.Counter()
+    for claim in claims:
         pixels.update(pixels_in_claim(claim))
+    return pixels
+
+def day3a(data):
+    pixels = process_claims(parse_all_claims(data))
     return len([a for a in pixels.values() if a>1])
 
 
@@ -45,7 +53,26 @@ def test_day3a():
     assert day3a(data) == 4
 
 
+def day3b(data):
+    claims = list(parse_all_claims(data))
+    pixels = process_claims(claims)
+    for claim in claims:
+        if all(pixels[p] == 1 for p in pixels_in_claim(claim)):
+            return claim.id
+        
+
+def test_day3b():
+    data = """
+#1 @ 1,3: 4x4
+#2 @ 3,1: 4x4
+#3 @ 5,5: 2x2
+"""    
+    assert day3b(data) == 3
+
+
+
 if __name__ == "__main__":
     with open('day3_input.txt') as f:
         data = f.read()
     print(day3a(data))
+    print(day3b(data))
