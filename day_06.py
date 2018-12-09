@@ -80,6 +80,39 @@ def part1(points):
     return counts
 
 
+
+def calc_safe_area(points, grid_size, size_threshold):
+    grid = {}    
+    for g in itertools.product(range(grid_size[0]), range(grid_size[1])):
+        distance_from_points = {i: distance_from_point(g, p) for i, p in enumerate(points)}
+        total_distances = sum(distance_from_points.values())
+
+        if total_distances < size_threshold:
+            grid[g] = 1
+
+    return sum(grid.values())
+
+
+def test_safe_area():
+    points = [
+        (1, 1),
+        (1, 6),
+        (8, 3),
+        (3, 4),
+        (5, 5),
+        (8, 9),
+    ]
+    grid_size = max(p[0] for p in points), max(p[1] for p in points)
+    safe_area = calc_safe_area(points, grid_size, 32)
+    assert safe_area == 16
+
+
+def part2(points):
+    grid_size = max(p[0] for p in points), max(p[1] for p in points)
+    safe_area = calc_safe_area(points, grid_size, 10000)
+    return safe_area
+
+
 if __name__ == "__main__":
     points = [
         (1, 1),
@@ -91,8 +124,8 @@ if __name__ == "__main__":
     ]
     print(part1(points))
 
-
     with open('day6_input.txt') as f:
         data = f.read()
     points = list(parse_input(data))
     print(part1(points).most_common(1))
+    print(part2(points))
