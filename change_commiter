@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git filter-branch --env-filter '
+git filter-branch -f --env-filter '
 
 OLD_EMAIL="eyal.lin@ge.com"
 CORRECT_NAME="Eyal Lin"
